@@ -81,7 +81,8 @@ if prompt := st.chat_input("Say Something..."):
                     ],
                 stream=True,
             )
-            response = st.write_stream(stream)
+            with st.spinner("输入中..."):
+                response = st.write_stream(stream)
         else:
             response = st.write_stream(chat_stream(prompt))
         st.feedback(
