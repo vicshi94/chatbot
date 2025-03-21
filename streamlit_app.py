@@ -12,6 +12,8 @@ with st.sidebar:
     hf_uid = st.text_input('Enter UserID:', type='default')
     if not(hf_uid.isdigit() and int(hf_uid)>=1000 and int(hf_uid)<=9999):
         st.warning('请登录!用户ID必须为4位数字', icon='⚠️')
+    elif int(hf_uid) != 0011:
+        st.warning('登陆成功，但密码错误', icon='⚠️')
     else:
         flag = True
         st.success('Enjoy the conversation!', icon='🤗')
