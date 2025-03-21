@@ -49,7 +49,9 @@ if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-4o-mini-2024-07-18"
 
 if "history" not in st.session_state:
-    st.session_state.history = []
+    st.session_state.history = [
+        {"role": "system", "content": DEFAULT_SYSTEM_PROMPT }
+    ]
 
 if "system_prompt" not in st.session_state:
     st.session_state["system_prompt"] = DEFAULT_SYSTEM_PROMPT
@@ -68,13 +70,12 @@ for i, message in enumerate(st.session_state.history):
                 args=[i],
             )
 
-if prompt := st.chat_input("Say something"):
+if prompt := st.chat_input("Say Something..."):
     with st.chat_message("user"):
         st.write(prompt)
     st.session_state.history.append({"role": "user", "content": prompt})
     with st.chat_message("assistant"):
         if flag == True:
-            
             stream = client.chat.completions.create(
                 model=st.session_state["openai_model"],
                 messages=[
