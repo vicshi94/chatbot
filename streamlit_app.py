@@ -17,7 +17,7 @@ with st.sidebar:
     if not(hf_uid.isdigit() and int(hf_uid)>=1000 and int(hf_uid)<=9999):
         st.warning('请登录!用户ID必须为4位数字', icon='⚠️')
     else:
-        if hf_uid == 1014:
+        if int(hf_uid) == 1014:
             flag = True
         st.success('Enjoy the conversation!', icon='🤗')
     st.markdown(
