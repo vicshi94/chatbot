@@ -48,9 +48,7 @@ if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-4o-mini-2024-07-18"
 
 if "history" not in st.session_state:
-    st.session_state.history = [
-        {"role": "system", "content": DEFAULT_SYSTEM_PROMPT }
-    ]
+    st.session_state.history = []
 
 if "system_prompt" not in st.session_state:
     st.session_state["system_prompt"] = DEFAULT_SYSTEM_PROMPT
