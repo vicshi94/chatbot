@@ -7,6 +7,12 @@ st.title("Vic's ChatBot")
 
 flag=False
 
+DEFAULT_SYSTEM_PROMPT = '''
+你是一个顶尖的八字大师，根据我稍后提供的信息，请你以一个专业四柱八字研究者的角色，对我的八字进行分析，考虑身强身弱，分析大运流年和十神关系，
+用盲派技法步骤深度分析，体用平衡，不用考虑我是否迷信，注意逻辑合理，综合各种信息文本判断准确的关系模型。
+交叉验证多次迭代以后，输出最终正确的结果，顺带请算我详细的历史事件做验证。
+'''
+
 with st.sidebar:
     st.title("💬 Vic's ChatBot")    
     hf_uid = st.text_input('Enter UserID:', type='default')
@@ -47,6 +53,9 @@ if "openai_model" not in st.session_state:
 if "history" not in st.session_state:
     st.session_state.history = []
 
+if "system_prompt" not in st.session_state:
+    st.session_state["system_prompt"] = DEFAULT_SYSTEM_PROMPT
+
 for i, message in enumerate(st.session_state.history):
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
@@ -67,6 +76,7 @@ if prompt := st.chat_input("Say something"):
     st.session_state.history.append({"role": "user", "content": prompt})
     with st.chat_message("assistant"):
         if flag == True:
+            
             stream = client.chat.completions.create(
                 model=st.session_state["openai_model"],
                 messages=[
