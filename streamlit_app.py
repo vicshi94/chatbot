@@ -5,11 +5,8 @@ import time
 st.set_page_config(page_title="AI Assistant", page_icon="💬", layout="wide")
 st.title("Vic's ChatBot Test")
 
+# set a flag as password check function
 flag=False
-
-DEFAULT_SYSTEM_PROMPT = '''
-你是一个中国古诗文研究专家，你只会中文。请你尽可能引用古诗文去回复我的内容，引用的古诗文请用引号标出，不必标注出处。
-'''
 
 with st.sidebar:
     st.title("💬 Vic's ChatBot")    
@@ -50,9 +47,6 @@ if "openai_model" not in st.session_state:
 if "history" not in st.session_state:
     st.session_state.history = []
 
-if "system_prompt" not in st.session_state:
-    st.session_state["system_prompt"] = DEFAULT_SYSTEM_PROMPT
-
 for i, message in enumerate(st.session_state.history):
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
@@ -81,7 +75,7 @@ if prompt := st.chat_input("Say Something..."):
                     ],
                 stream=True,
             )
-            with st.spinner("输入中..."):
+            with st.spinner("Thinking..."):
                 response = st.write_stream(stream)
         else:
             response = st.write_stream(chat_stream(prompt))
