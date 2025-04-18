@@ -40,7 +40,25 @@ with st.expander("Click here for guidance"):
         "a.实验描述:这是一个关于科普聊天的实验,...\n\n"
         "b.常规提示:你的聊天数据将会被记录在HKUST服务器"
     )
-
+with st.sidebar:
+    if st.button("🚮 Clear Conversation"):
+        # 清空前端对话气泡
+        st.session_state.history = []
+        # 清空 RAG 链内部记忆
+        chain.memory.clear()
+        # 同时重置用户名
+        st.session_state.user_name = ""
+        st.experimental_rerun()
+with st.sidebar:
+    st.markdown("### 🔽 Download Conversation")
+    if st.session_state.history:
+        st.download_button(
+            label="Download history as JSON",
+            data=history_json,
+            file_name="chat_history.json",
+            mime="application/json"
+        )
+        
 # ─── Chatbot identity & prompt components ─────────────────────────────────────
 CHATBOT_IDENTITY = "American"
 if social_cues_opt == "Without":
