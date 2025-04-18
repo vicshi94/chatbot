@@ -51,13 +51,13 @@ with st.sidebar:
         st.experimental_rerun()
 with st.sidebar:
     st.markdown("### 🔽 Download Conversation")
-    if st.session_state.history:
-        st.download_button(
-            label="Download history as JSON",
-            data=history_json,
-            file_name="chat_history.json",
-            mime="application/json"
-        )
+    # if st.session_state.history:
+    #     st.download_button(
+    #         label="Download history as JSON",
+    #         data=history_json,
+    #         file_name="chat_history.json",
+    #         mime="application/json"
+    #     )
         
 # ─── Chatbot identity & prompt components ─────────────────────────────────────
 CHATBOT_IDENTITY = "American"
