@@ -23,8 +23,8 @@ with st.sidebar:
         is_authenticated = True
         st.success('Enjoy the conversation!', icon='🤗')
     st.markdown("## Settings")
-    social_cues_opt = st.radio("Social cues:", ["With", "Without"], index=1)
-    source_opt     = st.radio("Source:",       ["With", "Without"], index=1)
+    social_cues_opt = st.radio("Social cues:", ["With", "Without"], index=0)
+    source_opt     = st.radio("Source:",       ["With", "Without"], index=0)
     tone_choice    = st.radio("Tone:",         ["Formal", "Casual"], index=1)
     st.markdown(
         "Brief Intro\n\n"
@@ -51,7 +51,7 @@ if social_cues_opt == "Without":
 else:
     SOCIAL_CUES = f"""
     - Give yourself a common {CHATBOT_IDENTITY} name, but the name should not be offensive.
-    - Ask the client his/her name in your first interaction and always address his/her name in the following conversation.
+    - Ask the client his/her name only in your first interaction and always address his/her name in the following conversation.
     """
 
 if source_opt == "Without":
