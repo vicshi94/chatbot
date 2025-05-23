@@ -52,11 +52,12 @@ tone_choice     = ["71", "72"][0]
 with st.sidebar:
     st.title("💬 Climate Change AI Assistant")    
     hf_uid = st.text_input('Enter UserID:', type='default')
+    USER_NAME = st.text_input("What should AI Assistant call you?:", value="")
     if not (hf_uid.isdigit() and 1000 <= int(hf_uid) <= 9999):
         st.warning('Please type in your user id!', icon='⚠️')
     else:
         is_authenticated = True
-        st.success('Enjoy the conversation!', icon='🤗')
+        st.success(f'Hello, {USER_NAME}!', icon='🤗')
 
 with st.expander("Click here for details"):
     st.markdown(
@@ -69,7 +70,7 @@ with st.expander("Click here for details"):
     )
 
 with st.sidebar:
-    st.button("### 🔽 Download Conversation")
+    st.markdown("### 🔽 Download Conversation")
     if "history" not in st.session_state:
         st.session_state.history = []
         st.warning("No conversation to download yet!")
@@ -99,7 +100,7 @@ if social_cues_opt == "42":
 else:
     SOCIAL_CUES = f"""
     - Give yourself a common {CHATBOT_IDENTITY} name, but the name should not be offensive.
-    - Ask the client his/her name only in your first interaction and always address his/her name in the following conversation.
+    - Always address his/her name {USER_NAME} in the following conversation.
     """
 
 if source_opt == "58":
