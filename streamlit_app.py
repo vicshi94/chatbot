@@ -20,27 +20,26 @@ def history_to_pdf(history, user_id, social_cues, source, tone):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_auto_page_break(auto=True, margin=15)
-    # Add a Unicode font (ensure the path is correct)
-    pdf.add_font('DejaVu', '', './fonts/DejaVuSans.ttf', uni=True)
-    pdf.set_font('DejaVu', '', 12)
+    pdf.set_font("Arial", size=12)
     for msg in history:
         role = "User" if msg["role"] == "user" else "Assistant"
         content = msg["content"]
         timestamp = msg.get("timestamp", "")
         if timestamp:
-            pdf.set_font("DejaVu", '', 9)
+            pdf.set_font("Arial", style='', size=9)
             pdf.cell(0, 7, f"[{timestamp}]", ln=True)
-        pdf.set_font("DejaVu", 'B', 11)
+        pdf.set_font("Arial", style='B', size=11)
         pdf.cell(0, 10, f"{role}:", ln=True)
-        pdf.set_font("DejaVu", '', 12)
+        pdf.set_font("Arial", style='', size=12)
         pdf.multi_cell(0, 10, content, border=0)
         pdf.ln(2)
     # Add the final code line
     final_code = f"{social_cues}{source}{tone}_{user_id}"
     pdf.ln(10)
-    pdf.set_font("DejaVu", 'B', 10)
+    pdf.set_font("Arial", style='B', size=10)
     pdf.cell(0, 10, final_code, ln=True, align='R')
-    pdf_bytes = pdf.output(dest='S').encode('utf-8')  # now utf-8 is ok with DejaVu font!
+    # Proper PDF bytes for Streamlit
+    pdf_bytes = pdf.output(dest='S').encode('latin-1')
     buffer = BytesIO(pdf_bytes)
     buffer.seek(0)
     return buffer
