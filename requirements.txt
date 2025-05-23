@@ -3,3 +3,4 @@ openai
 langchain-community
 faiss-cpu
 tiktoken
+fpdf
