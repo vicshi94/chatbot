@@ -16,33 +16,38 @@ st.set_page_config(page_title="Climate Change AI Assistant", page_icon="💬", l
 st.title("Climate Change AI Assistant")
 
 # ─── Download function ─────────────────────────────────────────────────────
-def history_to_pdf(history, user_id, social_cues, source, tone):
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.set_auto_page_break(auto=True, margin=15)
-    pdf.set_font("Arial", size=12)
+from io import BytesIO
+
+def history_to_html(history, user_id, social_cues, source, tone):
+    html = [
+        "<html><head><meta charset='utf-8'><title>Conversation Export</title>",
+        "<style>",
+        "body { font-family: Arial, sans-serif; padding: 20px; background: #f5f7fa; }",
+        ".msg { margin-bottom: 16px; padding: 10px 14px; border-radius: 12px; }",
+        ".user { background: #ddeeff; }",
+        ".assistant { background: #f0e5ff; }",
+        ".timestamp { color: #888; font-size: 0.85em; }",
+        ".role { font-weight: bold; }",
+        "</style></head><body>",
+        f"<h2>Climate Change AI Assistant Chat (User ID: {user_id})</h2>",
+        "<hr>",
+    ]
     for msg in history:
         role = "User" if msg["role"] == "user" else "Assistant"
-        content = msg["content"]
+        css_class = "user" if msg["role"] == "user" else "assistant"
         timestamp = msg.get("timestamp", "")
+        html.append(f"<div class='msg {css_class}'>")
         if timestamp:
-            pdf.set_font("Arial", style='', size=9)
-            pdf.cell(0, 7, f"[{timestamp}]", ln=True)
-        pdf.set_font("Arial", style='B', size=11)
-        pdf.cell(0, 10, f"{role}:", ln=True)
-        pdf.set_font("Arial", style='', size=12)
-        pdf.multi_cell(0, 10, content, border=0)
-        pdf.ln(2)
-    # Add the final code line
-    final_code = f"{social_cues}{source}{tone}_{user_id}"
-    pdf.ln(10)
-    pdf.set_font("Arial", style='B', size=10)
-    pdf.cell(0, 10, final_code, ln=True, align='R')
-    # Proper PDF bytes for Streamlit
-    pdf_bytes = pdf.output(dest='S')
-    buffer = BytesIO(pdf_bytes)
-    buffer.seek(0)
-    return buffer
+            html.append(f"<span class='timestamp'>[{timestamp}]</span><br>")
+        html.append(f"<span class='role'>{role}:</span><br>")
+        html.append(f"<div>{msg['content'].replace(chr(10), '<br>')}</div>")
+        html.append("</div>")
+    html.append("<hr>")
+    html.append(f"<div><b>Export code:</b> {social_cues}{source}{tone}_{user_id}</div>")
+    html.append("</body></html>")
+    html_str = "\n".join(html)
+    # Encode to bytes for Streamlit download
+    return BytesIO(html_str.encode("utf-8"))
 
 # ─── Sidebar: authentication & info ─────────────────────────────────────────────
 is_authenticated = False
@@ -75,24 +80,22 @@ with st.sidebar:
         st.experimental_rerun()
         
 with st.sidebar:
-    # st.markdown("### 🔽 Download Conversation")
     if "history" not in st.session_state:
         st.session_state.history = []
     else:
-        pdf_buffer = history_to_pdf(
-            st.session_state.history, 
-            user_id=hf_uid, 
-            social_cues=social_cues_opt, 
-            source=source_opt, 
+        html_buffer = history_to_html(
+            st.session_state.history,
+            user_id=hf_uid,
+            social_cues=social_cues_opt,
+            source=source_opt,
             tone=tone_choice
         )
         st.download_button(
-            label="Download as PDF",
-            data=pdf_buffer,
-            file_name="conversation.pdf",
-            mime="application/pdf",
+            label="Download as HTML",
+            data=html_buffer,
+            file_name="conversation.html",
+            mime="text/html"
         )
-
         
 # ─── Chatbot identity & prompt components ─────────────────────────────────────
 CHATBOT_IDENTITY = "American"
