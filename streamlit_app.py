@@ -39,7 +39,7 @@ def history_to_pdf(history, user_id, social_cues, source, tone):
     pdf.set_font("Arial", style='B', size=10)
     pdf.cell(0, 10, final_code, ln=True, align='R')
     # Proper PDF bytes for Streamlit
-    pdf_bytes = pdf.output(dest='S').encode('latin-1')
+    pdf_bytes = pdf.output(dest='S')
     buffer = BytesIO(pdf_bytes)
     buffer.seek(0)
     return buffer
@@ -75,10 +75,9 @@ with st.sidebar:
         st.experimental_rerun()
         
 with st.sidebar:
-    st.markdown("### 🔽 Download Conversation")
+    # st.markdown("### 🔽 Download Conversation")
     if "history" not in st.session_state:
         st.session_state.history = []
-        st.warning("No conversation to download yet!")
     else:
         pdf_buffer = history_to_pdf(
             st.session_state.history, 
