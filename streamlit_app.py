@@ -38,8 +38,9 @@ def history_to_pdf(history, user_id, social_cues, source, tone):
     pdf.ln(10)
     pdf.set_font("Arial", style='B', size=10)
     pdf.cell(0, 10, final_code, ln=True, align='R')
-    buffer = BytesIO()
-    pdf.output(buffer)
+    # Proper PDF bytes for Streamlit
+    pdf_bytes = pdf.output(dest='S').encode('latin-1')
+    buffer = BytesIO(pdf_bytes)
     buffer.seek(0)
     return buffer
 
