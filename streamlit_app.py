@@ -69,7 +69,10 @@ with st.expander("Click here for details"):
 
 with st.sidebar:
     st.button("### 🔽 Download Conversation")
-    if st.session_state.history:
+    if "history" not in st.session_state:
+        st.session_state.history = []
+        st.warning("No conversation to download yet!")
+    else:
         pdf_buffer = history_to_pdf(
             st.session_state.history, 
             user_id=hf_uid, 
@@ -83,8 +86,6 @@ with st.sidebar:
             file_name="conversation.pdf",
             mime="application/pdf",
         )
-    else:
-        st.warning("No conversation to download yet!")
 
         
 # ─── Chatbot identity & prompt components ─────────────────────────────────────
