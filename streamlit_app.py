@@ -69,7 +69,12 @@ with st.expander("Click here for details"):
         "1. Is today’s climate change just part of a natural cycle, which is unrelated to human activity?\n\n"
         "2. Is it too late to take meaningful action to address climate change?\n\n"
     )
-
+with st.sidebar:
+    if st.button("🚮 Clear Conversation"):
+        st.session_state.history = []
+        chain.memory.clear()
+        st.experimental_rerun()
+        
 with st.sidebar:
     st.markdown("### 🔽 Download Conversation")
     if "history" not in st.session_state:
@@ -84,7 +89,7 @@ with st.sidebar:
             tone=tone_choice
         )
         st.download_button(
-            label="Download PDF",
+            label="Download as PDF",
             data=pdf_buffer,
             file_name="conversation.pdf",
             mime="application/pdf",
