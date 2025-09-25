@@ -215,20 +215,10 @@ def save_feedback(index: int):
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# ─── Display chat history with feedback ───────────────────────────────────────
-# for i, msg in enumerate(st.session_state.history):
-#     with st.chat_message(msg["role"]):
-#         st.markdown(msg["content"])
-#     if msg["role"] == "assistant":
-#         prev = msg.get("feedback", None)
-#         st.session_state[f"feedback_{i}"] = prev
-#         st.feedback(
-#             "thumbs",
-#             key=f"feedback_{i}",
-#             disabled=prev is not None,
-#             on_change=save_feedback,
-#             args=[i],
-#         )
+# ─── Display chat history ─────────────────────────────────────────────────────
+for msg in st.session_state.history:
+    with st.chat_message(msg["role"]):
+        st.write(msg["content"])
 
 # ─── Chat input & response handling ────────────────────────────────────────────
 if user_input := st.chat_input("Say something"):
