@@ -56,7 +56,7 @@ source_opt      = ["57", "58"][0]
 tone_choice     = ["71", "72"][0]
 with st.sidebar:
     st.title("💬 Climate Change AI Assistant")
-    USER_NAME = st.text_input("What should AI Assistant call you?:", value="")
+    USER_NAME = st.text_input("What do you prefer an AI assistant to call you?", value="")
     hf_uid = st.text_input('Enter UserID:', type='default')
     if not (hf_uid.isdigit() and 1000 <= int(hf_uid) <= 9999):
         st.warning('Please type in your user id!', icon='⚠️')
