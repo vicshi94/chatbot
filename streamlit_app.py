@@ -63,6 +63,7 @@ with st.sidebar:
     else:
         is_authenticated = True
         st.success(f'Hello, {USER_NAME}!', icon='🤗')
+    download_slot = st.empty()
 
 with st.expander("Click here for details"):
     st.markdown(
@@ -79,23 +80,23 @@ with st.expander("Click here for details"):
 #         chain.memory.clear()
 #         st.experimental_rerun()
         
-with st.sidebar:
-    if "history" not in st.session_state:
-        st.session_state.history = []
-    else:
-        html_buffer = history_to_html(
-            st.session_state.history,
-            user_id=hf_uid,
-            social_cues=social_cues_opt,
-            source=source_opt,
-            tone=tone_choice
-        )
-        st.download_button(
-            label="Download as HTML",
-            data=html_buffer,
-            file_name="conversation.html",
-            mime="text/html"
-        )
+# with st.sidebar:
+#     if "history" not in st.session_state:
+#         st.session_state.history = []
+#     else:
+#         html_buffer = history_to_html(
+#             st.session_state.history,
+#             user_id=hf_uid,
+#             social_cues=social_cues_opt,
+#             source=source_opt,
+#             tone=tone_choice
+#         )
+#         st.download_button(
+#             label="Download as HTML",
+#             data=html_buffer,
+#             file_name="conversation.html",
+#             mime="text/html"
+#         )
         
 # ─── Chatbot identity & prompt components ─────────────────────────────────────
 CHATBOT_IDENTITY = "American"
@@ -215,19 +216,19 @@ if "history" not in st.session_state:
     st.session_state.history = []
 
 # ─── Display chat history with feedback ───────────────────────────────────────
-for i, msg in enumerate(st.session_state.history):
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
-    if msg["role"] == "assistant":
-        prev = msg.get("feedback", None)
-        st.session_state[f"feedback_{i}"] = prev
-        st.feedback(
-            "thumbs",
-            key=f"feedback_{i}",
-            disabled=prev is not None,
-            on_change=save_feedback,
-            args=[i],
-        )
+# for i, msg in enumerate(st.session_state.history):
+#     with st.chat_message(msg["role"]):
+#         st.markdown(msg["content"])
+#     if msg["role"] == "assistant":
+#         prev = msg.get("feedback", None)
+#         st.session_state[f"feedback_{i}"] = prev
+#         st.feedback(
+#             "thumbs",
+#             key=f"feedback_{i}",
+#             disabled=prev is not None,
+#             on_change=save_feedback,
+#             args=[i],
+#         )
 
 # ─── Chat input & response handling ────────────────────────────────────────────
 if user_input := st.chat_input("Say something"):
@@ -256,3 +257,19 @@ if user_input := st.chat_input("Say something"):
     # Immediately display the assistant's reply
     with st.chat_message("assistant"):
         st.write(answer)
+
+# ─── Render the (fresh) Download as HTML button AFTER history updates ─────────
+html_buffer = history_to_html(
+    st.session_state.history,
+    user_id=hf_uid,
+    social_cues=social_cues_opt,
+    source=source_opt,
+    tone=tone_choice
+)
+
+download_slot.download_button(
+    label="Download as HTML",
+    data=html_buffer,
+    file_name="conversation.html",
+    mime="text/html"
+)
