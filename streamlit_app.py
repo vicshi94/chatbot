@@ -56,9 +56,14 @@ source_opt      = ["57", "58"][0]
 tone_choice     = ["71", "72"][0]
 with st.sidebar:
     st.title("💬 Climate Change AI Assistant")
-    USER_NAME = st.text_input("What do you prefer an AI assistant to call you?", value="")
+    USER_NAME = st.text_input(
+        "What do you prefer an AI assistant to call you?", 
+        value="",
+        max_chars=20,
+        help="Up to 20 characters"
+    )
     hf_uid = st.text_input('Enter UserID:', type='default')
-    if not (hf_uid.isdigit() and 1000 <= int(hf_uid) <= 9999):
+    if not (hf_uid.isdigit() and 10000 <= int(hf_uid) <= 99999):
         st.warning('Please type in your user id!', icon='⚠️')
     else:
         is_authenticated = True
@@ -237,7 +242,8 @@ if user_input := st.chat_input("Say something"):
             result = chain({"question": user_input})
             answer = result["answer"]
     else:
-        answer = stream_and_capture(chat_stream(user_input))
+        # answer = stream_and_capture(chat_stream(user_input))
+        answer = ("I’m not authorized to reply yet. Please enter preferred name and user ID in the sidebar so I can continue helping you.")
 
     # Store assistant reply
     st.session_state.history.append({"role": "assistant", 
