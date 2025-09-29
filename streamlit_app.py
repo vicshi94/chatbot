@@ -98,11 +98,7 @@ def chat_stream(prompt: str):
 
 def stream_and_capture(generator):
     """Stream chunks into chat and capture full text."""
-    text = ""
-    for chunk in generator:
-        text += chunk
-        st.write(chunk, end="", flush=True)
-    return text
+    return "".join(generator)
 
 def save_feedback(index: int):
     st.session_state.history[index]["feedback"] = st.session_state[f"feedback_{index}"]
