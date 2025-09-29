@@ -65,7 +65,7 @@ with st.sidebar:
         st.success(f'Hello, {USER_NAME}!', icon='🤗')
     download_slot = st.empty()
 
-with st.expander("Click here for details"):
+with st.expander("Click here to hide details", expanded=True):
     st.markdown(
         "Imagine you were chatting with a friend recently about current events. Your friend said something like:\n\n"
         "I'm not convinced about all this climate change panic. The Earth's climate has always changed – it goes through natural warming and cooling cycles. It doesn't seem humans are really causing it. Besides, isn't it already too late for us to do anything? Maybe we should just accept it as is.\n\n"
